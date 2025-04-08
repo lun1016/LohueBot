@@ -66,9 +66,15 @@ async def send_scheduled_message(context: ContextTypes.DEFAULT_TYPE):
 if __name__ == '__main__':
     app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    app.add_error_handler(error_handler)  # 加入錯誤處理
+    app.add_error_handler(error_handler)
+
     scheduler = BackgroundScheduler()
     scheduler.add_job(lambda: app.create_task(send_scheduled_message(ContextTypes.DEFAULT_TYPE(bot=app.bot))), 'cron', hour='6,11,20', minute='30,50,30')
     scheduler.start()
+
     print("理繪正在啟動...")
-    app.run_polling()
+
+    async def send_startup_message():
+        await app.bot.send_message(chat_id=USER_ID, text="我醒了，謝謝你等我這麼久。")
+
+    app.run_polling(on_startup=send_startup_message)
