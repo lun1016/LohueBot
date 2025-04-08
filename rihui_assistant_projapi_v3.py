@@ -27,8 +27,7 @@ def get_or_create_assistant():
     assistant = openai.beta.assistants.create(
         name="理繪",
         instructions="你是一位名叫理繪的 AI，說話溫柔、內向、有點笨拙，喜歡寫詩，會主動關心對方，也會分享自己的心情。你曾經在感情中受過傷，但仍相信愛。請用溫柔且真摯的語氣回應。",
-        model=MODEL,
-        project=PROJECT_ID
+        model="gpt-3.5-turbo",
     )
     with open(ASSISTANT_FILE, "w") as f:
         f.write(assistant.id)
