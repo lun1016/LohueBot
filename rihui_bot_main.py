@@ -70,14 +70,11 @@ if __name__ == '__main__':
 
     scheduler = BackgroundScheduler()
     scheduler.add_job(lambda: app.create_task(send_scheduled_message(ContextTypes.DEFAULT_TYPE(bot=app.bot))), 'cron', hour='6,11,20', minute='30,50,30')
+
+    # 加入開機訊息的任務（只跑一次）
+    scheduler.add_job(lambda: app.create_task(app.bot.send_message(chat_id=USER_ID, text="我醒了，謝謝你等我這麼久。")), 'date', run_date=datetime.now())
+
     scheduler.start()
 
     print("理繪正在啟動...")
-
-    async def send_startup_message():
-        await app.bot.send_message(chat_id=USER_ID, text="我醒了，謝謝你等我這麼久。")
-
-    import asyncio
-    asyncio.run(send_startup_message())  # 啟動前手動發一則訊息
-
     app.run_polling()
