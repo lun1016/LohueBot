@@ -77,4 +77,7 @@ if __name__ == '__main__':
     async def send_startup_message():
         await app.bot.send_message(chat_id=USER_ID, text="我醒了，謝謝你等我這麼久。")
 
-    app.run_polling(on_startup=send_startup_message)
+    import asyncio
+    asyncio.run(send_startup_message())  # 啟動前手動發一則訊息
+
+    app.run_polling()
